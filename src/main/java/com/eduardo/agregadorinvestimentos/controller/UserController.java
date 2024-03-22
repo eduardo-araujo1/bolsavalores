@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -27,8 +29,27 @@ public class UserController {
         return ResponseEntity.created(uri).body(newUser);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable String userID){
-        return null;
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable("id") String id){
+        var findUserById = service.getUserById(id);
+        return ResponseEntity.ok(findUserById);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<User>> findAllUsers(){
+        var listAll = service.findAllUsers();
+        return ResponseEntity.ok(listAll);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<User> deleteUser(@PathVariable("id") String id){
+        service.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> update(@PathVariable("id") String id, @RequestBody UserDto dto){
+        User updateUser = service.update(id, dto);
+        return ResponseEntity.ok().body(updateUser);
     }
 }
