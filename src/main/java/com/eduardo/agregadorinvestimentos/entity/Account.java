@@ -1,5 +1,6 @@
 package com.eduardo.agregadorinvestimentos.entity;
 
+import com.eduardo.agregadorinvestimentos.dto.CreateAccountDto;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class Account {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "account")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account")
     @PrimaryKeyJoinColumn
     private BillingAddress billingAddress;
 
@@ -36,6 +37,7 @@ public class Account {
         this.description = description;
         this.accountStocks = accountStocks;
     }
+
 
     public UUID getAccountId() {
         return accountId;

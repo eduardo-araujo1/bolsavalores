@@ -1,5 +1,7 @@
 package com.eduardo.agregadorinvestimentos.controller;
 
+import com.eduardo.agregadorinvestimentos.dto.AccountReponseDto;
+import com.eduardo.agregadorinvestimentos.dto.CreateAccountDto;
 import com.eduardo.agregadorinvestimentos.dto.UserDto;
 import com.eduardo.agregadorinvestimentos.entity.User;
 import com.eduardo.agregadorinvestimentos.service.UserService;
@@ -51,5 +53,17 @@ public class UserController {
     public ResponseEntity<User> update(@PathVariable("id") String id, @RequestBody UserDto dto){
         User updateUser = service.update(id, dto);
         return ResponseEntity.ok().body(updateUser);
+    }
+
+    @PostMapping("/{id}/accounts")
+    public ResponseEntity<User> createAccount(@PathVariable("id") String id, @RequestBody CreateAccountDto accountDto) {
+        service.createAccount(id, accountDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/accounts")
+    public ResponseEntity<List<AccountReponseDto>> listAccounts(@PathVariable("id") String userId) {
+        List<AccountReponseDto> accounts = service.listAccounts(userId);
+        return ResponseEntity.ok(accounts);
     }
 }

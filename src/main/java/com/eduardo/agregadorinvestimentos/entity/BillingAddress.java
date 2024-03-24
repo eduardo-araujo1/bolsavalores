@@ -1,5 +1,6 @@
 package com.eduardo.agregadorinvestimentos.entity;
 
+import com.eduardo.agregadorinvestimentos.dto.CreateAccountDto;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -11,7 +12,7 @@ public class BillingAddress {
     @Id
     @Column(name = "account_id")
     private UUID id;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "account_id")
     private Account account;
@@ -29,6 +30,7 @@ public class BillingAddress {
         this.street = street;
         this.number = number;
     }
+
 
     public UUID getId() {
         return id;
