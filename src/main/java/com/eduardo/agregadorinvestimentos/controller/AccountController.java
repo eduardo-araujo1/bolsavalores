@@ -1,9 +1,12 @@
 package com.eduardo.agregadorinvestimentos.controller;
 
+import com.eduardo.agregadorinvestimentos.dto.AccountStockResponseDto;
 import com.eduardo.agregadorinvestimentos.dto.AssociateAccountStockDto;
 import com.eduardo.agregadorinvestimentos.service.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/accounts")
@@ -22,6 +25,13 @@ public class AccountController {
         accountService.associateStock(accountId, dto);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{accountId}/stocks")
+    public ResponseEntity<List<AccountStockResponseDto>> associateStock(@PathVariable("accountId") String accountId) {
+        var stocks = accountService.listStocks(accountId);
+
+        return ResponseEntity.ok(stocks);
     }
 
 }
