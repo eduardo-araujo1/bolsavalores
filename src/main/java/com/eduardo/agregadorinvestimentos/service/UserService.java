@@ -9,15 +9,12 @@ import com.eduardo.agregadorinvestimentos.entity.User;
 import com.eduardo.agregadorinvestimentos.repository.AccountRepository;
 import com.eduardo.agregadorinvestimentos.repository.BillingAdressRepository;
 import com.eduardo.agregadorinvestimentos.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -106,4 +103,6 @@ public class UserService {
                         new AccountReponseDto(account.getAccountId().toString(), account.getDescription()))
                 .toList();
     }
+
+
 }

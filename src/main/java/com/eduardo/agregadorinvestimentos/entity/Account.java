@@ -1,10 +1,10 @@
 package com.eduardo.agregadorinvestimentos.entity;
 
-import com.eduardo.agregadorinvestimentos.dto.CreateAccountDto;
 import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.UUID;
+
 
 @Entity
 @Table(name = "tb_accounts")

@@ -56,8 +56,7 @@ public class AccountService {
                         new AccountStockResponseDto(
                                 as.getStock().getStockId(),
                                 as.getQuantity(),
-                                getTotal(as.getQuantity(), as.getStock().getStockId())
-                        ))
+                                getTotal(as.getQuantity(), as.getStock().getStockId())))
                 .toList();
     }
 
@@ -71,6 +70,4 @@ public class AccountService {
 
         return quantity * price;
     }
-
-
 }

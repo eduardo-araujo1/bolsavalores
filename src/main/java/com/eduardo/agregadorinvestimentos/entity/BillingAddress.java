@@ -1,6 +1,5 @@
 package com.eduardo.agregadorinvestimentos.entity;
 
-import com.eduardo.agregadorinvestimentos.dto.CreateAccountDto;
 import jakarta.persistence.*;
 
 import java.util.UUID;
