@@ -1,7 +1,6 @@
 package com.eduardo.agregadorinvestimentos.service;
 
 import com.eduardo.agregadorinvestimentos.client.BrapiClient;
-import com.eduardo.agregadorinvestimentos.client.dto.BrapiResponseDto;
 import com.eduardo.agregadorinvestimentos.dto.AccountStockResponseDto;
 import com.eduardo.agregadorinvestimentos.dto.AssociateAccountStockDto;
 import com.eduardo.agregadorinvestimentos.entity.Account;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
@@ -67,7 +65,6 @@ public class AccountService {
                 .findFirst()
                 .map(result -> result.regularMarketPrice())
                 .orElse(0.0);
-
         return quantity * price;
     }
 }
