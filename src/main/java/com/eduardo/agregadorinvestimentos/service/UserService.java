@@ -6,6 +6,7 @@ import com.eduardo.agregadorinvestimentos.dto.UserDto;
 import com.eduardo.agregadorinvestimentos.entity.Account;
 import com.eduardo.agregadorinvestimentos.entity.BillingAddress;
 import com.eduardo.agregadorinvestimentos.entity.User;
+import com.eduardo.agregadorinvestimentos.exception.UserNotFoundException;
 import com.eduardo.agregadorinvestimentos.repository.AccountRepository;
 import com.eduardo.agregadorinvestimentos.repository.BillingAdressRepository;
 import com.eduardo.agregadorinvestimentos.repository.UserRepository;
@@ -35,12 +36,8 @@ public class UserService {
 
     }
 
-    public Optional<User> getUserById(String id) {
-        var user = userRepository.findById(UUID.fromString(id));
-        if (!user.isPresent()) {
-            throw new RuntimeException("Usuário não pode ser encontrado ou não existe.");
-        }
-        return user;
+    public User getUserById(String id) {
+        return getUserByIdOrThrow(id);
     }
 
     public List<User> findAllUsers() {
@@ -48,12 +45,12 @@ public class UserService {
     }
 
     public void deleteUser(String id) {
-        User user = userRepository.findById(UUID.fromString(id)).orElseThrow(RuntimeException::new);
+        User user = getUserByIdOrThrow(id);
         userRepository.delete(user);
     }
 
     public User update(String id, UserDto userDto) {
-        User user = userRepository.findById(UUID.fromString(id)).orElseThrow(RuntimeException::new);
+        User user = getUserByIdOrThrow(id);
 
         if (!userDto.password().isEmpty()) user.setPassword(userDto.password());
         if (!userDto.email().isEmpty()) user.setEmail(userDto.email());
@@ -63,13 +60,10 @@ public class UserService {
     }
 
     public void createAccount(String id, CreateAccountDto accountDto) {
-
-        User user = userRepository.findById(UUID.fromString(id)).orElseThrow(RuntimeException::new);
-
+        User user = getUserByIdOrThrow(id);
 
         Account account = createAccountFromDto(user, accountDto);
         Account savedAccount = accountRepository.save(account);
-
 
         BillingAddress billingAddress = createBillingAddressFromDto(savedAccount, accountDto);
         billingAdressRepository.save(billingAddress);
@@ -95,7 +89,7 @@ public class UserService {
     }
 
     public List<AccountReponseDto> listAccounts(String id) {
-        User user = userRepository.findById(UUID.fromString(id)).orElseThrow(RuntimeException::new);
+        User user = getUserByIdOrThrow(id);
 
         return user.getAccounts()
                 .stream()
@@ -104,5 +98,8 @@ public class UserService {
                 .toList();
     }
 
-
+    private User getUserByIdOrThrow(String id) {
+        return userRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new UserNotFoundException("Usuário não pode ser encontrado ou não existe."));
+    }
 }

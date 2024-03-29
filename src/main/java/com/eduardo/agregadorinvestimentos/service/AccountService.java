@@ -7,6 +7,8 @@ import com.eduardo.agregadorinvestimentos.entity.Account;
 import com.eduardo.agregadorinvestimentos.entity.AccountStock;
 import com.eduardo.agregadorinvestimentos.entity.AccountStockId;
 import com.eduardo.agregadorinvestimentos.entity.Stock;
+import com.eduardo.agregadorinvestimentos.exception.AccountNotFoundException;
+import com.eduardo.agregadorinvestimentos.exception.StockNotFoundException;
 import com.eduardo.agregadorinvestimentos.repository.AccountRepository;
 import com.eduardo.agregadorinvestimentos.repository.AccountStockRepository;
 import com.eduardo.agregadorinvestimentos.repository.StockRepository;
@@ -34,9 +36,11 @@ public class AccountService {
 
 
     public void associateStock(String accountId, AssociateAccountStockDto dto) {
-        Account account = accountRepository.findById(UUID.fromString(accountId)).orElseThrow(RuntimeException::new);
+        Account account = accountRepository.findById(UUID.fromString(accountId)).orElseThrow(() ->
+                new AccountNotFoundException("Essa conta não pode ser encontrada ou não existe."));
 
-        Stock stock = stockRepository.findById(dto.stockId()).orElseThrow(RuntimeException::new);
+        Stock stock = stockRepository.findById(dto.stockId()).orElseThrow(() ->
+                new StockNotFoundException("Stock não encontrado."));
 
         AccountStockId id = new AccountStockId(account.getAccountId(), stock.getStockId());
         AccountStock entity = new AccountStock(id, account, stock, dto.quantity());
@@ -46,7 +50,8 @@ public class AccountService {
 
     public List<AccountStockResponseDto> listStocks(String accountId) {
 
-        Account account = accountRepository.findById(UUID.fromString(accountId)).orElseThrow(RuntimeException::new);
+        Account account = accountRepository.findById(UUID.fromString(accountId)).orElseThrow(() ->
+                new AccountNotFoundException("Essa conta não pode ser encontrada ou não existe."));
 
         return account.getAccountStocks()
                 .stream()
