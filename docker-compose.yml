@@ -13,9 +13,10 @@ services:
     volumes:
       - "./conf.d:/etc/mysql/conf.d:ro"
 
-  api:
-    image: aula
+  agregadorinvestimentos:
+    image: agregadorinvestimentos
     ports:
       - 8080:8080
     depends_on:
       - mysql
+    restart: always
