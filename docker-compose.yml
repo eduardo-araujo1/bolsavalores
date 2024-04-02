@@ -12,3 +12,10 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
       - "./conf.d:/etc/mysql/conf.d:ro"
+
+  api:
+    image: aula
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql

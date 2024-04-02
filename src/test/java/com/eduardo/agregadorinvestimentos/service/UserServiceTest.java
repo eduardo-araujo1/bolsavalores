@@ -6,6 +6,7 @@ import com.eduardo.agregadorinvestimentos.dto.UserDto;
 import com.eduardo.agregadorinvestimentos.entity.Account;
 import com.eduardo.agregadorinvestimentos.entity.BillingAddress;
 import com.eduardo.agregadorinvestimentos.entity.User;
+import com.eduardo.agregadorinvestimentos.exception.UserNotFoundException;
 import com.eduardo.agregadorinvestimentos.repository.AccountRepository;
 import com.eduardo.agregadorinvestimentos.repository.BillingAdressRepository;
 import com.eduardo.agregadorinvestimentos.repository.UserRepository;
@@ -65,10 +66,10 @@ public class UserServiceTest {
         User existingUser = new User(UUID.fromString(userId), "username", "email@example.com", "password", Instant.now(), Instant.now());
         when(userRepository.findById(UUID.fromString(userId))).thenReturn(Optional.of(existingUser));
 
-        Optional<User> foundUser = service.getUserById(userId);
+        User foundUser = service.getUserByIdOrThrow(userId);
 
-        assertTrue(foundUser.isPresent());
-        assertEquals(existingUser, foundUser.get());
+        assertNotNull(foundUser);
+        assertEquals(existingUser, foundUser);
     }
 
     @Test
@@ -77,7 +78,7 @@ public class UserServiceTest {
             when(userRepository.findById(UUID.fromString(userId))).thenReturn(Optional.empty());
 
             assertThatThrownBy(() -> service.getUserById(userId))
-                    .isInstanceOf(RuntimeException.class)
+                    .isInstanceOf(UserNotFoundException.class)
                     .hasMessage("Usuário não pode ser encontrado ou não existe.");
     }
 
@@ -113,7 +114,7 @@ public class UserServiceTest {
         when(userRepository.findById(UUID.fromString(userId))).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> service.deleteUser(userId))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
@@ -141,7 +142,7 @@ public class UserServiceTest {
         when(userRepository.findById(UUID.fromString(userId))).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> service.update(userId, userDto))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
@@ -166,7 +167,7 @@ public class UserServiceTest {
 
 
         assertThatThrownBy(() -> service.createAccount(userId, accountDto))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(UserNotFoundException.class);
 
         verify(userRepository, times(1)).findById(UUID.fromString(userId));
         verifyNoInteractions(accountRepository);

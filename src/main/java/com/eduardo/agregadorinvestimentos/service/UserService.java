@@ -98,7 +98,7 @@ public class UserService {
                 .toList();
     }
 
-    private User getUserByIdOrThrow(String id) {
+    public User getUserByIdOrThrow(String id) {
         return userRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new UserNotFoundException("Usuário não pode ser encontrado ou não existe."));
     }

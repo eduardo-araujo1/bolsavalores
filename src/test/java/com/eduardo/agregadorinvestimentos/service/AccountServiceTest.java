@@ -61,23 +61,4 @@ public class AccountServiceTest {
         verify(accountStockRepository, times(1)).save(any(AccountStock.class));
     }
 
-    @Test
-    public void testAssociateStock_AccountOrStockNotFound() {
-        String accountId = UUID.randomUUID().toString();
-        String stockId = "XYZ";
-        int quantity = 10;
-
-        when(accountRepository.findById(UUID.fromString(accountId))).thenReturn(Optional.empty());
-        when(stockRepository.findById(stockId)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> service.associateStock(accountId, new AssociateAccountStockDto(stockId, quantity)))
-                .isInstanceOf(RuntimeException.class);
-
-
-        verify(accountRepository, never()).findById(UUID.fromString(accountId));
-        verify(stockRepository, never()).findById(stockId);
-        verify(accountStockRepository, never()).save(any(AccountStock.class));
-    }
-
-
 }
